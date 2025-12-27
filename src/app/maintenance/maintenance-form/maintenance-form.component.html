@@ -1,1 +1,141 @@
-<p>maintenance-form works!</p>
+<div class="card border-0 shadow-sm rounded-4 h-100">
+    <!-- Header -->
+    <div class="card-header bg-white border-0 pt-4 pb-3 px-5 d-flex justify-content-between align-items-start">
+        <div>
+            <h4 class="mb-1 fw-bold text-dark">New Maintenance Request</h4>
+            <p class="text-muted mb-0 small">Please fill in the technical details below.</p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <span class="text-secondary small fw-bold text-uppercase" style="letter-spacing: 0.5px;">Status:</span>
+            <span
+                class="badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill px-3 py-2 d-flex align-items-center gap-1">
+                <span class="material-icons" style="font-size: 14px;">edit</span> DRAFT
+            </span>
+        </div>
+    </div>
+
+    <!-- Stepper -->
+    <div class="card-body px-5 py-2">
+        <div class="position-relative d-flex justify-content-between align-items-start my-4 px-4 stepper-container">
+            <!-- Decorator Line -->
+            <div class="stepper-line"></div>
+
+            <div *ngFor="let step of steps"
+                class="d-flex flex-column align-items-center position-relative z-1 stepper-item">
+                <div class="step-circle rounded-circle d-flex align-items-center justify-content-center mb-2 shadow-sm"
+                    [ngClass]="{'bg-warning text-white': step.active, 'bg-light text-muted': !step.active}">
+                    <span class="material-icons" style="font-size: 20px;">{{ step.icon }}</span>
+                </div>
+                <span class="small fw-bold text-uppercase"
+                    [ngClass]="{'text-dark': step.active, 'text-muted': !step.active}"
+                    style="letter-spacing: 0.5px; font-size: 0.75rem;">
+                    {{ step.label }}
+                </span>
+            </div>
+        </div>
+
+        <hr class="border-secondary-subtle opacity-25 my-4">
+
+        <!-- Form -->
+        <form>
+            <div class="mb-4">
+                <label class="form-label small fw-bold text-uppercase text-secondary mb-2"
+                    style="letter-spacing: 0.5px;">Subject</label>
+                <input type="text" class="form-control form-control-lg fs-6"
+                    placeholder="e.g. Hydraulic Pump Leak on Line 4">
+            </div>
+
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <label class="form-label small fw-bold text-uppercase text-secondary mb-2"
+                        style="letter-spacing: 0.5px;">Equipment / Work Center</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0 text-muted"><span class="material-icons"
+                                style="font-size: 20px;">precision_manufacturing</span></span>
+                        <input type="text" class="form-control form-control-lg fs-6 border-start-0 ps-0"
+                            placeholder="Search ID or Name...">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label small fw-bold text-uppercase text-secondary mb-2"
+                        style="letter-spacing: 0.5px;">Maintenance Type</label>
+                    <select class="form-select form-select-lg fs-6 text-muted">
+                        <option selected>Select category...</option>
+                        <option *ngFor="let cat of categories">{{ cat }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <label class="form-label small fw-bold text-uppercase text-secondary mb-2"
+                        style="letter-spacing: 0.5px;">Technician</label>
+                    <div class="position-relative">
+                        <span class="material-icons position-absolute text-muted"
+                            style="font-size: 20px; left: 16px; top: 50%; transform: translateY(-50%); z-index: 5; pointer-events: none;">engineering</span>
+                        <select
+                            class="form-select form-select-lg fs-6 text-muted ps-5 shadow-none pb-2 pt-2 select-with-icon-left">
+                            <option selected disabled>Unassigned</option>
+                            <option *ngFor="let tech of technicians">{{ tech }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label small fw-bold text-uppercase text-secondary mb-2"
+                        style="letter-spacing: 0.5px;">Priority</label>
+                    <div class="position-relative">
+                        <select
+                            class="form-select form-select-lg fs-6 text-muted remove-arrow border-end-0 shadow-none pb-2 pt-2 select-with-icon-right">
+                            <option selected disabled>Set priority level...</option>
+                            <option *ngFor="let p of priorities">{{ p }}</option>
+                        </select>
+                        <span class="material-icons position-absolute text-muted"
+                            style="font-size: 20px; right: 16px; top: 50%; transform: translateY(-50%); z-index: 5; pointer-events: none;">flag</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <label class="form-label small fw-bold text-uppercase text-secondary mb-2"
+                        style="letter-spacing: 0.5px;">Scheduled Date</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-lg fs-6 border-end-0"
+                            placeholder="MM/DD/YYYY">
+                        <span class="input-group-text bg-white border-start-0 text-muted"><span class="material-icons"
+                                style="font-size: 20px;">calendar_today</span></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label small fw-bold text-uppercase text-secondary mb-2"
+                        style="letter-spacing: 0.5px;">Est. Duration</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0 text-muted"><span class="material-icons"
+                                style="font-size: 20px;">timer</span></span>
+                        <input type="text" class="form-control form-control-lg fs-6 border-start-0 ps-0"
+                            placeholder="e.g. 2h 30m">
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-2">
+                <label class="form-label small fw-bold text-uppercase text-secondary mb-2"
+                    style="letter-spacing: 0.5px;">Notes & Description</label>
+                <textarea class="form-control form-control-lg fs-6" rows="4"
+                    placeholder="Enter a detailed description of the issue, required tools, or safety instructions..."></textarea>
+            </div>
+            <div class="text-end mb-4">
+                <small class="text-muted" style="font-size: 0.75rem;">Maximum 500 characters</small>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="card-footer bg-white border-top py-4 px-5 text-end">
+        <button class="btn btn-link text-dark text-decoration-none fw-semibold me-3">Cancel</button>
+        <button
+            class="btn btn-warning text-white fw-bold px-4 py-2 rounded-2 shadow-sm d-inline-flex align-items-center gap-2 custom-orange-btn">
+            <span class="material-icons" style="font-size: 18px;">save</span> Submit Request
+        </button>
+    </div>
+</div>

@@ -1,0 +1,102 @@
+
+// Variables
+$primary-color: #000;
+$warning-color: #f59e0b;
+$light-bg: #f8f9fa;
+$border-color: #e9ecef;
+
+// Main Card Base
+.card {
+  font-family: 'Inter', 'Roboto', sans-serif;
+  transition: box-shadow 0.3s ease;
+  overflow: hidden;
+
+  // Header Icon
+  .material-icons.bg-light {
+    background-color: #f3f4f6 !important;
+  }
+}
+
+// Action Item Cards
+.action-card {
+  background-color: #fff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 12px !important; // Match design curvature
+  
+  // Left border is handled inline in HTML for dynamic color, 
+  // but ensure it doesn't look like a standard border
+  border: 1px solid #f3f4f6 !important; // Very subtle border for structure
+  border-left-width: 4px !important;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+    
+    .cta-btn {
+      background-color: #212529;
+      color: #fff;
+    }
+  }
+}
+
+// Badges
+.badge {
+  letter-spacing: 0.5px;
+  
+  &.bg-warning-subtle {
+    background-color: #fffbeb !important; // Lighter yellow
+    color: #b45309 !important; // Darker text for contrast
+    border-color: #fcd34d !important;
+  }
+  
+  &.bg-light {
+    background-color: #f3f4f6 !important;
+    color: #374151 !important;
+  }
+}
+
+// CTA Buttons
+.cta-btn {
+  font-size: 0.85rem;
+  font-weight: 500;
+  border-color: #e5e7eb;
+  color: #b45309; // Default text color (Warning dark)
+  color: #4b5563; // Default text color (Gray dark)
+  transition: all 0.2s ease;
+  
+  &:hover {
+    border-color: #212529;
+  }
+}
+
+// Specific CTA Text Colors based on row context could be added,
+// but general dark/gray works for the "Investigate" style buttons.
+// Let's override specific text colors if needed via utility classes or specific SCSS.
+
+// Rotate animation for refresh button
+.hover-rotate {
+  transition: transform 0.5s ease;
+  &:hover {
+    transform: rotate(180deg);
+  }
+}
+
+// Footer Link Hover
+.hover-text-dark {
+  transition: color 0.2s ease;
+  &:hover {
+    color: #212529 !important; // Darker on hover
+  }
+}
+
+// Mobile Adjustments
+@media (max-width: 768px) {
+  .w-100-mobile {
+    width: 100%;
+    margin-top: 10px;
+  }
+  
+  .action-card {
+    border-left-width: 4px !important; // Maintain visibility
+  }
+}

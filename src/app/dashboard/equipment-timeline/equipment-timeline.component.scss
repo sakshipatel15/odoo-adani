@@ -1,0 +1,83 @@
+// Variables
+$primary-orange: #f59e0b; // Matches the button
+$connector-color: #e5e7eb;
+
+.card {
+  font-family: 'Inter', 'Roboto', sans-serif;
+  overflow: hidden;
+}
+
+.timeline-item {
+  // Animation
+  opacity: 0;
+  animation: slideIn 0.5s ease-out forwards;
+  
+  @for $i from 1 through 5 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{$i * 0.1}s;
+    }
+  }
+
+  .timeline-line {
+    position: absolute;
+    left: 17px; // Center of icon (36px width) - 1px
+    top: 36px;
+    bottom: 0;
+    width: 2px;
+    background-color: $connector-color;
+    z-index: 0;
+  }
+
+  .timeline-icon {
+    position: relative;
+    z-index: 1;
+
+    .icon-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background-color: #fff;
+      transition: transform 0.2s ease;
+      
+      &.bg-light {
+        background-color: #f3f4f6 !important;
+        color: #4b5563;
+      }
+      
+      &.border-warning {
+        border-color: $primary-orange !important;
+        color: $primary-orange;
+        border-width: 2px !important; // Thicker border for critical
+      }
+    }
+  }
+
+  &:hover {
+    .icon-circle {
+      transform: scale(1.1);
+    }
+  }
+}
+
+.custom-orange-btn {
+  background-color: $primary-orange;
+  border-color: $primary-orange;
+  transition: opacity 0.2s ease;
+  
+  &:hover {
+    opacity: 0.9;
+    background-color: darken($primary-orange, 5%);
+    border-color: darken($primary-orange, 5%);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

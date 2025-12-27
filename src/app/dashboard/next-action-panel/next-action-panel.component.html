@@ -1,1 +1,51 @@
-<p>next-action-panel works!</p>
+<div class="card border-0 shadow-sm rounded-4 h-100">
+    <div class="card-header bg-white border-0 pt-4 pb-2 px-4 d-flex justify-content-between align-items-center">
+        <div>
+            <h5 class="mb-1 d-flex align-items-center gap-2 fw-semibold text-dark">
+                <span class="material-icons text-dark bg-light rounded-circle p-1"
+                    style="font-size: 20px;">psychology</span>
+                What Should I Do Next?
+            </h5>
+            <small class="text-muted">Recommended actions based on system analysis</small>
+        </div>
+        <button class="btn btn-link text-muted p-0 text-decoration-none hover-rotate">
+            <span class="material-icons" style="font-size: 20px;">refresh</span>
+        </button>
+    </div>
+
+    <div class="card-body px-4 pb-2">
+        <div class="d-flex flex-column gap-3">
+            <div *ngFor="let item of actionItems" class="action-card card p-3 border-0 shadow-sm"
+                [style.border-left]="'4px solid ' + item.borderColor">
+                <div class="row align-items-center">
+                    <div class="col-md-8 col-12 mb-2 mb-md-0">
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <span class="badge rounded-1 px-2 py-1 fw-semibold text-uppercase"
+                                [ngClass]="item.badgeClass" style="font-size: 0.7rem; letter-spacing: 0.5px;">
+                                {{ item.priority === 'Critical' ? 'Critical Alert' : item.priority === 'Attention' ?
+                                'Attention Needed' : item.priority.toUpperCase() }}
+                            </span>
+                            <small class="text-muted">• {{ item.time || item.dueRaw }}</small>
+                        </div>
+                        <h6 class="mb-1 fw-medium text-dark">{{ item.title }}</h6>
+                        <small class="text-muted">{{ item.description }}</small>
+                    </div>
+                    <div class="col-md-4 col-12 text-md-end text-start">
+                        <button
+                            class="btn btn-outline-dark rounded-pill px-3 py-1 d-inline-flex align-items-center gap-2 cta-btn w-100-mobile justify-content-center">
+                            {{ item.ctaText }}
+                            <span class="material-icons" style="font-size: 16px;">{{ item.ctaIcon }}</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-footer bg-white border-top py-3 text-center">
+        <a href="javascript:void(0)"
+            class="text-muted text-decoration-none small d-flex align-items-center justify-content-center gap-1 hover-text-dark">
+            View All Pending Actions <span class="material-icons" style="font-size: 16px;">checklist</span>
+        </a>
+    </div>
+</div>

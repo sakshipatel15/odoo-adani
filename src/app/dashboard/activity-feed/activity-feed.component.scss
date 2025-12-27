@@ -1,0 +1,104 @@
+
+// Variables
+$primary-color: #000;
+$warning-color: #ff9800;
+$light-bg: #f8f9fa;
+$border-color: #e9ecef;
+$text-muted: #6c757d;
+
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden; // Keep animations inside
+  font-family: 'Inter', 'Roboto', sans-serif;
+
+  &:hover {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
+  }
+}
+
+.timeline-item {
+  // Animation
+  opacity: 0;
+  animation: slideIn 0.5s ease-out forwards;
+  
+  @for $i from 1 through 5 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{$i * 0.1}s;
+    }
+  }
+
+  .timeline-line {
+    position: absolute;
+    left: 17px; // Center with icon (36px width / 2) - 1px width
+    top: 36px;
+    bottom: 0px; // Connects effectively to the next item
+    width: 2px;
+    background-color: #e9ecef;
+    z-index: 0;
+  }
+
+  .timeline-icon {
+    position: relative;
+    z-index: 1;
+
+    .icon-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 18px;
+      transition: transform 0.2s ease;
+
+      &.bg-light {
+        color: #000;
+        background-color: #f8f9fa !important;
+      }
+      
+      &.bg-dark {
+          background-color: #212529 !important;
+      }
+
+       // Specific warning background to match image closely
+      &.bg-warning-subtle {
+          background-color: #fff3cd !important;
+          color: #ffc107 !important;
+      }
+    }
+  }
+
+  &:hover {
+    .icon-circle {
+      transform: scale(1.1);
+    }
+    
+    .timeline-content h6 {
+       color: $warning-color !important;
+       transition: color 0.2s ease;
+    }
+  }
+}
+
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Custom Scrollbar for the list if needed (though current design doesn't scroll)
+.activity-timeline {
+  max-height: 600px; // Safeguard
+  overflow-y: auto;
+  scrollbar-width: thin;
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+  }
+}

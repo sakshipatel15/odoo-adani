@@ -1,0 +1,106 @@
+// Variables
+$primary-orange: #c27d28; // Slightly darker orange/brown from image
+$text-muted: #6c757d;
+$border-color: #dee2e6;
+
+.card {
+  font-family: 'Inter', 'Roboto', sans-serif;
+}
+
+// Stepper Styling
+.stepper-container {
+  height: 60px;
+}
+
+.stepper-line {
+  position: absolute;
+  top: 20px;
+  left: 50px;
+  right: 50px;
+  height: 1px;
+  background-color: #e0e0e0;
+  z-index: 0;
+}
+
+.stepper-item {
+  width: 80px;
+}
+
+.step-circle {
+  width: 40px;
+  height: 40px;
+  background-color: #f8f9fa;
+  z-index: 1; 
+  transition: all 0.3s ease;
+  
+  &.bg-warning {
+    background-color: $primary-orange !important;
+    box-shadow: 0 0 0 4px rgba($primary-orange, 0.2) !important;
+  }
+}
+
+// Form Controls
+.form-label {
+  font-size: 0.75rem;
+}
+
+.form-control, .form-select, .input-group-text {
+  border-color: #e0e0e0;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  
+  &:focus {
+    border-color: none !important;
+    box-shadow: none !important;
+  }
+}
+
+.input-group-text {
+  background-color: #fff;
+  color: #9ca3af !important;
+}
+
+.select-with-icon-left {
+  padding-left: 3.25rem !important;
+}
+
+.select-with-icon-right {
+  padding-right: 3.25rem !important;
+}
+
+select, option {
+  font-family: inherit; /* Ensure suggestions match form font */
+}
+
+// Custom Orange Button
+.custom-orange-btn {
+  background-color: $primary-orange !important;
+  border-color: $primary-orange !important;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    // Hover effect removed as per request
+    opacity: 1;
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+// Utility to remove default select arrow
+.remove-arrow {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: none !important;
+  
+  &::-ms-expand {
+    display: none;
+  }
+}
+
+// Badge
+.badge.bg-warning-subtle {
+  background-color: #fff8e1 !important;
+  color: #b45309 !important;
+  border-color: #fcd34d !important;
+}
