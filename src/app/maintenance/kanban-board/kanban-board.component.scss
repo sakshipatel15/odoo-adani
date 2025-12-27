@@ -1,0 +1,117 @@
+// Variables
+$primary-orange: #c27d28;
+$text-muted: #6c757d;
+
+.card {
+  font-family: 'Inter', 'Roboto', sans-serif;
+}
+
+// Column Dot
+.column-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+// Kanban Column Container
+.kanban-column {
+    background-color: #F4F5F7; // Darker light gray for better contrast
+    border-radius: 12px;
+    padding: 1rem;
+    height: 100%;
+}
+
+// Card Divider
+.card-divider {
+    height: 1px;
+    background-color: #e9ecef;
+    margin: 0.75rem 0;
+}
+
+// Kanban Card
+.kanban-card {
+    transition: all 0.2s ease;
+    cursor: pointer;
+    
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+    }
+}
+
+// Active Card Highlight
+.active-card {
+    border-left: 4px solid $primary-orange !important;
+}
+
+.active-bar {
+    width: 40px;
+    height: 4px;
+    background-color: $primary-orange;
+}
+
+// Avatars
+.avatar-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    overflow: hidden;
+    
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+// Dot in Filters
+.dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+// Custom Orange Button
+.custom-orange-btn {
+  background-color: $primary-orange !important;
+  border-color: $primary-orange !important;
+  
+   &:hover {
+    opacity: 0.9;
+  }
+}
+
+// Dashed Button
+.border-dashed {
+    border-style: dashed !important;
+    border-width: 2px !important;
+    background-color: #fafafa;
+    
+    &:hover {
+        background-color: #f0f0f0;
+        border-color: #ced4da !important;
+    }
+}
+
+// Priority Badges Custom Colors
+.bg-secondary-subtle {
+    background-color: #fff7ed !important; // Light orange/yellow for MED
+    color: #b45309 !important;
+    border-color: #fed7aa !important;
+}
+
+.text-warning {
+    color: #b45309 !important; // Darker orange for HIGH text
+}
+
+.bg-warning-subtle {
+    background-color: #fff7ed !important; // Reusing light orange for base
+    border-color: transparent !important;
+}
+
+// Specific overrides to match image exactly
+.badge {
+    letter-spacing: 0.3px;
+}
