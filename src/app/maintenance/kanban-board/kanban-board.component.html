@@ -1,1 +1,143 @@
-<p>kanban-board works!</p>
+<div class="container-fluid px-4 py-4 min-vh-100 bg-light d-flex flex-column">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-start mb-4">
+        <div>
+            <h2 class="fw-bold text-dark mb-1">Kanban Board</h2>
+            <p class="text-muted mb-0">Manage workflow status across facility zones.</p>
+        </div>
+        <div class="d-flex gap-3">
+            <button
+                class="btn btn-white bg-white border shadow-sm d-flex align-items-center gap-2 fw-semibold px-3 text-dark">
+                <span class="material-icons" style="font-size: 18px;">filter_list</span> Filters
+            </button>
+            <button class="btn btn-warning text-white d-flex align-items-center gap-2 fw-bold px-3 custom-orange-btn">
+                <span class="material-icons" style="font-size: 18px;">add</span> New Work Order
+            </button>
+        </div>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="d-flex gap-2 mb-4">
+        <button class="btn btn-dark fw-medium px-3 rounded-3 shadow-sm">All Tasks</button>
+        <button
+            class="btn btn-white bg-white border border-light-subtle text-secondary fw-medium px-3 rounded-3 shadow-sm">My
+            Tasks</button>
+        <button
+            class="btn btn-white bg-white border border-light-subtle text-secondary fw-medium px-3 rounded-3 shadow-sm d-flex align-items-center gap-2">
+            <span class="dot bg-danger"></span> Overdue
+        </button>
+        <button
+            class="btn btn-white bg-white border border-light-subtle text-secondary fw-medium px-3 rounded-3 shadow-sm d-flex align-items-center gap-2">
+            <span class="dot bg-warning"></span> High Priority
+        </button>
+    </div>
+
+    <!-- Kanban Columns -->
+    <div class="row g-4 flex-grow-1">
+        <div class="col-md-4" *ngFor="let col of columns">
+            <div class="kanban-column">
+
+                <!-- Column Header -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="column-dot" [style.background-color]="col.color"></span>
+                        <span class="fw-bold text-uppercase text-secondary small" style="letter-spacing: 0.5px;">{{
+                            col.title }}</span>
+                        <span
+                            class="badge bg-white text-secondary rounded-pill px-2 shadow-sm border border-light-subtle">{{
+                            col.count }}</span>
+                    </div>
+                    <button class="btn btn-sm btn-link text-muted p-0 text-decoration-none">
+                        <span class="material-icons" style="font-size: 20px;">more_horiz</span>
+                    </button>
+                </div>
+
+                <!-- Cards Container -->
+                <div class="d-flex flex-column gap-3">
+
+                    <div *ngFor="let card of col.cards"
+                        class="card border-0 shadow-sm p-3 kanban-card position-relative"
+                        [ngClass]="{'active-card': card.type === 'active'}">
+
+                        <!-- Card Top: ID & Priority/Badge -->
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-muted small fw-medium">{{ card.id }}</span>
+
+                            <ng-container [ngSwitch]="true">
+                                <span *ngSwitchCase="card.dueDateStatus === 'done'"
+                                    class="badge bg-success-subtle text-success rounded-pill d-flex align-items-center gap-1 border border-success-subtle fw-bold"
+                                    style="font-size: 0.65rem;">
+                                    <span class="material-icons" style="font-size: 12px;">check_circle</span> DONE
+                                </span>
+                                <span *ngSwitchDefault class="badge rounded-1 px-2 py-1 fw-bold"
+                                    [ngClass]="getPriorityClass(card.priority)" style="font-size: 0.65rem;">
+                                    {{ card.priority }}
+                                </span>
+                            </ng-container>
+                        </div>
+
+                        <!-- Card Title -->
+                        <h6 class="fw-semibold text-dark mb-2 card-title-text">{{ card.title }}
+                            <div *ngIf="card.type === 'active'" class="active-bar mt-2 rounded"></div>
+                        </h6>
+
+                        <!-- Divider -->
+                        <div class="card-divider"></div>
+
+                        <!-- Card Bottom: Assignee & Date -->
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <!-- Assignee -->
+                            <div class="d-flex align-items-center gap-2" *ngIf="card.assignee; else noAssignee">
+                                <div class="avatar-circle">
+                                    <img [src]="card.assignee.avatar" alt="User"
+                                        *ngIf="card.assignee.avatar && !card.assignee.avatar.includes('unassigned')">
+                                    <span class="material-icons text-muted" style="font-size: 20px;"
+                                        *ngIf="card.assignee.avatar.includes('unassigned')">account_circle</span>
+                                </div>
+                                <span class="text-muted small">{{ card.assignee.name }}</span>
+                            </div>
+                            <ng-template #noAssignee>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div
+                                        class="avatar-circle bg-light d-flex align-items-center justify-content-center">
+                                        <span class="fw-bold text-muted">?</span>
+                                    </div>
+                                </div>
+                            </ng-template>
+
+                            <!-- Date Badge -->
+                            <div [ngSwitch]="card.dueDateStatus">
+                                <span *ngSwitchCase="'overdue'"
+                                    class="text-danger small fw-bold d-flex align-items-center gap-1">
+                                    <span class="material-icons" style="font-size: 14px;">warning</span> {{ card.dueDate
+                                    }}
+                                </span>
+                                <span *ngSwitchCase="'normal'" class="text-muted small d-flex align-items-center gap-1">
+                                    <span class="material-icons" style="font-size: 14px;"
+                                        *ngIf="card.priority === 'HIGH' && card.dueDate.includes('left')">schedule</span>
+                                    <span class="material-icons" style="font-size: 14px;"
+                                        *ngIf="card.dueDate === 'Today'">calendar_today</span>
+                                    {{ card.dueDate }}
+                                </span>
+                                <span *ngSwitchCase="'done'" class="text-muted small">
+                                    {{ card.dueDate }}
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Add Task Button (Only for NEW column) -->
+                    <button *ngIf="col.title === 'NEW'"
+                        class="btn btn-white bg-white border-dashed text-muted fw-medium py-3 d-flex align-items-center justify-content-center gap-2 mt-2 w-100 shadow-sm">
+                        <span class="material-icons" style="font-size: 18px;">add</span> Add Task
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

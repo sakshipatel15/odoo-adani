@@ -24,5 +24,9 @@ export const routes: Routes = [
     {
         path: 'equipment-list',
         loadComponent: () => import('./equipment/equipment-list/equipment-list.component').then(m => m.EquipmentListComponent)
+    },
+    {
+        path: 'kanban-board',
+        loadComponent: () => import('./maintenance/kanban-board/kanban-board.component').then(m => m.KanbanBoardComponent)
     }
 ];
