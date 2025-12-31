@@ -9,11 +9,13 @@
         <div class="user-profile">
             <button class="icon-btn"><span class="material-icons">notifications</span></button>
             <button class="icon-btn"><span class="material-icons">settings</span></button>
-            <div class="profile-info">
-                <div class="name">Commander Ray</div>
-                <div class="role">Shift Lead</div>
+            <div class="profile-info" *ngIf="currentUser">
+                <div class="name">{{ currentUser.name }}</div>
+                <div class="role">{{ currentUser.role }}</div>
             </div>
-            <div class="avatar-circle"></div>
+            <div class="avatar-circle">
+                <img *ngIf="currentUser?.avatar" [src]="currentUser.avatar" alt="User">
+            </div>
         </div>
     </div>
 
@@ -21,18 +23,23 @@
     <div class="controls-bar">
         <div class="search-wrapper">
             <span class="material-icons">search</span>
-            <input type="text" placeholder="Search technicians by name or ID..." [(ngModel)]="searchQuery">
+            <input type="text" placeholder="Search technicians by name or ID..." [(ngModel)]="searchQuery"
+                (input)="applyFilter()">
         </div>
 
         <div class="filter-pills">
-            <button class="pill active"><span class="material-icons">groups</span> All Teams</button>
-            <button class="pill"><span class="material-icons">water_drop</span> Hydraulics</button>
-            <button class="pill"><span class="material-icons">bolt</span> Electrical</button>
-            <button class="pill"><span class="material-icons">build</span> Mechanical</button>
+            <button class="pill" [class.active]="activeFilter === 'All Teams'" (click)="setFilter('All Teams')"><span
+                    class="material-icons">groups</span> All Teams</button>
+            <button class="pill" [class.active]="activeFilter === 'Hydraulics'" (click)="setFilter('Hydraulics')"><span
+                    class="material-icons">water_drop</span> Hydraulics</button>
+            <button class="pill" [class.active]="activeFilter === 'Electrical'" (click)="setFilter('Electrical')"><span
+                    class="material-icons">bolt</span> Electrical</button>
+            <button class="pill" [class.active]="activeFilter === 'Mechanical'" (click)="setFilter('Mechanical')"><span
+                    class="material-icons">build</span> Mechanical</button>
         </div>
 
         <div class="right-actions">
-            <button class="icon-btn square"><span class="material-icons">filter_list</span></button>
+            <!-- <button class="icon-btn square"><span class="material-icons">filter_list</span></button> -->
             <button class="btn-new" (click)="openNewTechModal()">
                 <span class="material-icons">add</span> New Tech
             </button>
@@ -51,7 +58,7 @@
             Compiling Roster Data...
         </div>
 
-        <div class="tech-card" *ngFor="let tech of technicians" [style.border-left-color]="tech.accentColor">
+        <div class="tech-card" *ngFor="let tech of paginatedList" [style.border-left-color]="tech.accentColor">
             <div class="card-header">
                 <div class="avatar-wrapper">
                     <img [src]="tech.avatar" alt="Avatar" onerror="this.style.display='none'">
@@ -95,7 +102,7 @@
         </div>
 
         <!-- Recruit New Card -->
-        <div class="recruit-card">
+        <div class="recruit-card" (click)="openNewTechModal()" style="cursor: pointer;">
             <div class="icon-circle">
                 <span class="material-icons">person_add_alt_1</span>
             </div>
@@ -105,11 +112,16 @@
     </div>
 
     <!-- Footer -->
-    <div class="footer-pagination">
-        <span class="showing">Showing <strong>1-7</strong> of <strong>48</strong> technicians</span>
+    <div class="footer-pagination" *ngIf="filteredTechnicians.length > 0">
+        <span class="showing">
+            Showing
+            <strong>{{ (currentPage - 1) * itemsPerPage + 1 }} - {{ Math.min(currentPage * itemsPerPage,
+                filteredTechnicians.length) }}</strong>
+            of <strong>{{ filteredTechnicians.length }}</strong> technicians
+        </span>
         <div class="pages">
-            <button class="btn-page">Previous</button>
-            <button class="btn-page">Next</button>
+            <button class="btn-page" [disabled]="currentPage === 1" (click)="prevPage()">Previous</button>
+            <button class="btn-page" [disabled]="currentPage === totalPages" (click)="nextPage()">Next</button>
         </div>
     </div>
 </div>

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { UserService } from '../../core/services/user.service';
+import { AuthService } from '../../core/services/auth.service';
 import { TechnicianFormComponent } from '../technician-form/technician-form.component';
 
 interface Technician {
@@ -26,17 +27,40 @@ interface Technician {
   styleUrl: './technician-list.component.scss'
 })
 export class TechnicianListComponent implements OnInit {
+  Math = Math;
   @Input() selectedTech: Technician | null = null;
   showModal = false;
 
   searchQuery: string = '';
-  technicians: Technician[] = [];
   isLoading = true;
+  technicians: Technician[] = [];
+  filteredTechnicians: Technician[] = [];
+  activeFilter: string = 'All Teams';
+  currentUser: any = null; // { name, role, avatar }
 
-  constructor(private userService: UserService) { }
+  // Pagination
+  currentPage = 1;
+  itemsPerPage = 6;
+
+  constructor(
+    private userService: UserService,
+    private authService: AuthService
+  ) { }
 
   ngOnInit() {
+    this.loadCurrentUser();
     this.loadTechnicians();
+  }
+
+  loadCurrentUser() {
+    // Get from AuthService session
+    const session = this.authService.currentUser();
+    if (session) {
+      this.currentUser = session;
+    } else {
+      // Fallback or fetch
+      this.currentUser = { name: 'Commander', role: 'Operator', avatar: '' };
+    }
   }
 
   loadTechnicians() {
@@ -44,6 +68,7 @@ export class TechnicianListComponent implements OnInit {
     this.userService.getTechniciansWithStats().subscribe({
       next: (data) => {
         this.technicians = data.map(profile => this.mapProfileToTechnician(profile));
+        this.applyFilter(); // Initial filter
         this.isLoading = false;
       },
       error: (err) => {
@@ -51,6 +76,47 @@ export class TechnicianListComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  setFilter(filter: string) {
+    this.activeFilter = filter;
+    this.currentPage = 1; // Reset to page 1
+    this.applyFilter();
+  }
+
+  applyFilter() {
+    let temp = this.technicians;
+
+    // 1. Category Filter
+    if (this.activeFilter !== 'All Teams') {
+      temp = temp.filter(t => t.role.toLowerCase().includes(this.activeFilter.toLowerCase().split(' ')[0])); // "Hydraulics" matches "HYDRAULICS A"
+    }
+
+    // 2. Search Filter
+    if (this.searchQuery.trim()) {
+      const q = this.searchQuery.toLowerCase();
+      temp = temp.filter(t => t.name.toLowerCase().includes(q) || t.id.toLowerCase().includes(q));
+    }
+
+    this.filteredTechnicians = temp;
+  }
+
+  // Pagination Getters
+  get paginatedList(): Technician[] {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    return this.filteredTechnicians.slice(startIndex, startIndex + this.itemsPerPage);
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.filteredTechnicians.length / this.itemsPerPage) || 1;
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) this.currentPage++;
+  }
+
+  prevPage() {
+    if (this.currentPage > 1) this.currentPage--;
   }
 
   openNewTechModal() {

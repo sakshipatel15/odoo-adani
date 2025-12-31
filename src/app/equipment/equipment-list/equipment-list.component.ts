@@ -152,7 +152,7 @@ export class EquipmentListComponent implements OnInit {
   }
 
   departments: any[] = [];
-  statuses: string[] = ['Operational', 'Maintenance Due', 'Offline - Error', 'Inspection Needed'];
+  statuses: string[] = []; // Populated dynamically via ReferenceDataService
 
   constructor(
     private equipmentService: EquipmentService,

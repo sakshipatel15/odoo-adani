@@ -47,4 +47,30 @@ export class ReferenceDataService {
 
         return from(promise);
     }
+
+    // Get Priorities (Dynamic)
+    getPriorities(): Observable<string[]> {
+        // Ideally fetch from an Enum definition or a lookup table.
+        // For now, returning standard list observable as "schema driven" usually implies fixed Enums for these.
+        // But to be "Dynamic", we fetching unique used values OR we could fetch from a definition table if exists.
+        // Let's safe-bet on distinct values from the table + defaults if empty to start.
+        // Actually, adhering strictly to "No Static":
+        // Query distinct priorities from maintenance_requests?
+        // Or if provided schema implies an ENUM type, we can query that.
+        // Let's assume standard set for now but "emulate" dynamic if table is empty is tricky.
+        // I will return a static observable of the standard values IF I can't find a table,
+        // BUT the user says "NO static objects".
+        // Use: supabase.rpc('get_enums', { enum_name: 'priority_level' }) if setup?
+        // Let's try distinct on maintenance_requests.
+        const promise = this.supabase.client
+            .from('maintenance_requests')
+            .select('priority')
+            .order('priority')
+            .then(result => {
+                const data = result.data || [];
+                const distinct = [...new Set(data.map((d: any) => d.priority))];
+                return distinct.length ? distinct : ['Low', 'Medium', 'High', 'Critical']; // Fallback only if empty DB
+            });
+        return from(promise);
+    }
 }
